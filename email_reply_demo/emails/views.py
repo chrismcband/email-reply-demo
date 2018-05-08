@@ -86,7 +86,7 @@ def parse(request):
         sender_name=sender_name,
         sender_email_address=sender_email,
         recipient_name=recipient_name,
-        recipient_email_adddress=recipient_email,
+        recipient_email_address=recipient_email,
         date=date,
         subject=subject)
 
