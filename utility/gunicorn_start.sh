@@ -6,4 +6,5 @@ DEFAULT_VENV="/home/$(whoami)/.virtualenvs/email_reply_demo"
 VENV=${VENV:=$DEFAULT_VENV}
 
 cd $CODE_ROOT
+source ${VENV}/bin/postactivate
 exec ${VENV}/bin/gunicorn -c $CODE_ROOT/config/gunicorn.py config.wsgi
