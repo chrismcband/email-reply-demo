@@ -3,6 +3,7 @@ from django.db.models import Count
 from django.db.transaction import on_commit
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DetailView, ListView
 from email import message_from_string
 from email.utils import parseaddr
@@ -62,8 +63,10 @@ class EmailListView(LoginRequiredMixin, ListView):
         return context
 
 
+@csrf_exempt()
 def parse(self, request):
     data = request.body.decode('utf8')
+    print(data)
     email_message = message_from_string(data)
 
     # get all headers
