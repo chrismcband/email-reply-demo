@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
+from django.db.transaction import on_commit
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
@@ -24,7 +25,7 @@ class EmailCreateView(LoginRequiredMixin, CreateView):
         self.object.html_content = ''
         self.object.save()
 
-        send_email_task.delay(self.object.id)
+        on_commit(lambda: send_email_task.delay(self.object.id))
 
         return HttpResponseRedirect(self.get_success_url())
 
