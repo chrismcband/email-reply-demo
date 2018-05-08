@@ -1,9 +1,9 @@
-bind = "127.0.0.1:8000"
+bind = "127.0.0.1:9100"
 backlog = 256
-workers = 4
-worker_class = 'gevent'
-worker_connections = 256
-max_requests =  512
+# workers = 4
+# worker_class = 'gevent'
+# worker_connections = 256
+max_requests = 512
 timeout = 90
 keepalive = 1
 
