@@ -1,4 +1,5 @@
 from django.db import models
+from email_reply_parser import EmailReplyParser
 
 
 class EmailMessage(models.Model):
@@ -59,3 +60,8 @@ class ReceivedEmailMessage(models.Model):
     html_content = models.TextField()
     reply_to_email = models.ForeignKey(EmailMessage, on_delete=models.CASCADE,
                                        blank=True, null=True)
+
+    def get_reply_text(self):
+        reply_text = EmailReplyParser.parse_reply(self.plain_content)
+
+        return reply_text
