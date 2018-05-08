@@ -18,13 +18,14 @@
         <th>To</th>
         <th>Subject</th>
         <th>Message</th>
+        <th>Replies</th>
       </tr>
     </thead>
     <tbody>
     {% for email in object_list %}
       <tr>
         <td>{{ email.created }}</td>
-        <td>{{ email.recipient_name }} <{{ email.recipient_email_address }}></td>
+        <td>{{ email.recipient_name }} &lt;{{ email.recipient_email_address }}&gt;</td>
         <td>
           <a href="{% url 'emails:detail' email.id %}">
             {{ email.subject }}
@@ -32,6 +33,9 @@
         </td>
         <td>
           {{ email.plain_content|truncatechars:50 }}
+        </td>
+        <td>
+          {{ email.reply_count }}
         </td>
       </tr>
     {% endfor %}

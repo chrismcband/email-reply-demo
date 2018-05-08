@@ -13,8 +13,8 @@
       <p>Date: {{ object.created }}</p>
       <p>{{ object.plain_content }}</p>
 
-      {% if replies %}
-        <h2>Replies</h2>
+      {% if object.receivedemailmessage_set.count %}
+        <h3>Replies</h3>
         <table class="table">
           <thead>
             <tr>
@@ -24,10 +24,10 @@
             </tr>
           </thead>
           <tbody>
-          {% for reply in replies %}
+          {% for reply in object.receivedemailmessage_set.all %}
             <tr>
               <td>{{ reply.date }}</td>
-              <td>{{ reply.sender_name }} <{{ reply.sender_email_address }}></td>
+              <td>{{ reply.sender_name }} &lt;{{ reply.sender_email_address }}&gt;</td>
               <td>{{ reply.plain_content }}</td>
             </tr>
           {% endfor %}

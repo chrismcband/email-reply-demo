@@ -57,3 +57,5 @@ class ReceivedEmailMessage(models.Model):
     headers = models.ManyToManyField(EmailHeader)
     plain_content = models.TextField()
     html_content = models.TextField()
+    reply_to_email = models.ForeignKey(EmailMessage, on_delete=models.CASCADE,
+                                       blank=True, null=True)

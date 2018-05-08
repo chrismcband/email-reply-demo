@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
@@ -25,9 +26,6 @@ class EmailDetailView(LoginRequiredMixin, DetailView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         email_message = self.get_object()
-        context['replies'] = ReceivedEmailMessage.objects.filter(
-            headers__name='In-Reply-To',
-            headers__value=email_message.message_id)
 
         return context
 
@@ -37,6 +35,11 @@ class EmailListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by id
     slug_field = 'id'
     slug_url_kwarg = 'id'
+
+    def get_queryset(self):
+        queryset = super(EmailListView, self).get_queryset()
+
+        return queryset.annotate(reply_count=Count('receivedemailmessage'))
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
