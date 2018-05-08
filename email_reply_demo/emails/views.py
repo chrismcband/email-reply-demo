@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DetailView, ListView
 from email import message_from_string
 from email.utils import parseaddr
+import re
 import dateutil.parser
 from .models import EmailMessage, ReceivedEmailMessage, EmailHeader
 from .forms import EmailMessageForm
@@ -102,14 +103,30 @@ def parse(request):
             content_type = sub_message.get_content_type()
 
             if content_type == 'text/plain':
-                recipient_email.plain_content = decoded_content
+                received_email.plain_content = decoded_content
             elif content_type == 'text/html':
-                recipient_email.html_content = decoded_content
+                received_email.html_content = decoded_content
 
     received_email.save()
 
     for name, value in headers:
         received_email.headers.add(
             EmailHeader.objects.create(name=name, value=value))
+        if name == 'In-Reply-To':
+            p = re.compile('<(.*)@eu-west-1.amazonses.com>')
+            match = p.match(value)
+
+            if match:
+                message_id = match.group(1)
+
+                try:
+                    email_message = EmailMessage.objects.get(
+                        message_id=message_id)
+                    received_email.reply_to_email = email_message
+                except EmailMessage.DoesNotExit:
+                    print('Unable to find matching message id')
+                    return HttpResponse(status=403)
+
+    received_email.save()
 
     return HttpResponse(status=201)
