@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Email: {{ object.id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>Subject: {{ object.subject }}</h2>
+      <p>Date: {{ object.created }}</p>
+      <p>{{ object.plain_content }}</p>
+
+      {% if replies %}
+        <h2>Replies</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>From</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for reply in replies %}
+            <tr>
+              <td>{{ reply.date }}</td>
+              <td>{{ reply.sender_name }} <{{ reply.sender_email_address }}></td>
+              <td>{{ reply.plain_content }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <strong>No replies</strong>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

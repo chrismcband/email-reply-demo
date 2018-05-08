@@ -43,14 +43,17 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
               <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
               <a class="nav-link" href="{% url 'about' %}">About</a>
             </li>
             {% if request.user.is_authenticated %}
-              <li class="nav-item">
+              <li class="nav-item {% if request.resolver_match.url_name == 'list' and '/emails/' in request.path %}active{% endif %}">
+                <a class="nav-link" href="{% url 'emails:list' %}">{% trans "Emails" %}</a>
+              </li>
+              <li class="nav-item {% if request.resolver_match.url_name == 'detail' and '/users/' in request.path %}active{% endif %}">
                 {# URL provided by django-allauth/account/urls.py #}
                 <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
               </li>
@@ -82,9 +85,11 @@
           {% endfor %}
       {% endif %}
 
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
+      <div class="page-content">
+        {% block content %}
+          <p>Click a page above.</p>
+        {% endblock content %}
+      </div>
 
     </div> <!-- /container -->
 

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% load crispy_forms_tags %}
+{% block title %}Emails{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="float-right">
+    <a href="{% url 'emails:create' %}" class="btn btn-success">Email someone</a>
+  </div>
+
+  <h2>Emails</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>To</th>
+        <th>Subject</th>
+        <th>Message</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for email in object_list %}
+      <tr>
+        <td>{{ email.created }}</td>
+        <td>{{ email.recipient_name }} <{{ email.recipient_email_address }}></td>
+        <td>
+          <a href="{% url 'emails:detail' email.id %}">
+            {{ email.subject }}
+          </a>
+        </td>
+        <td>
+          {{ email.plain_content|truncatechars:50 }}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
