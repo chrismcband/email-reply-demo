@@ -39,6 +39,9 @@ EMAIL_HOST = 'localhost'
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = 1025
 
+AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')
+
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
@@ -63,6 +66,6 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 # Celery
 # ------------------------------------------------------------------------------
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_always_eager
-CELERY_ALWAYS_EAGER = True
+#CELERY_ALWAYS_EAGER = True
 # Your stuff...
 # ------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
 from email import message_from_string
@@ -8,12 +8,25 @@ from email.utils import parseaddr
 import dateutil.parser
 from .models import EmailMessage, ReceivedEmailMessage, EmailHeader
 from .forms import EmailMessageForm
+from .tasks import send_email_task
 
 
 class EmailCreateView(LoginRequiredMixin, CreateView):
     model = EmailMessage
     form_class = EmailMessageForm
     success_url = reverse_lazy('emails:list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.sender_name = 'Notifications'
+        self.object.sender_email_address = \
+            'alerts@notifications.chrismcdonald.ltd'
+        self.object.html_content = ''
+        self.object.save()
+
+        send_email_task.delay(self.object.id)
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class EmailDetailView(LoginRequiredMixin, DetailView):
