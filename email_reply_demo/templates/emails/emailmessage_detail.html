@@ -28,7 +28,7 @@
             <tr>
               <td>{{ reply.date }}</td>
               <td>{{ reply.sender_name }} &lt;{{ reply.sender_email_address }}&gt;</td>
-              <td>{{ reply.plain_content }}</td>
+              <td>{{ reply.plain_content|linebreaks }}</td>
             </tr>
           {% endfor %}
           </tbody>
