@@ -19,8 +19,8 @@ Install system dependencies by running this from the project directory::
 
 Install python packages once you have created a virtual environment, specifying python 3.6::
 
-    mkvirtualenv --python=/usr/bin/python3.6
-    utility/install_python_dependencies.sh
+    mkvirtualenv --python=/usr/bin/python3.6 email_reply_demo
+    sudo utility/install_python_dependencies.sh install
 
 
 Create a postgres database and user::
