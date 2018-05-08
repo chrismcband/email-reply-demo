@@ -55,7 +55,7 @@ class EmailListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super(EmailListView, self).get_queryset()
 
-        return queryset.annotate(reply_count=Count('receivedemailmessage'))
+        return queryset.order_by('-id').annotate(reply_count=Count('receivedemailmessage'))
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -123,7 +123,7 @@ def parse(request):
                     email_message = EmailMessage.objects.get(
                         message_id=message_id)
                     received_email.reply_to_email = email_message
-                except EmailMessage.DoesNotExit:
+                except EmailMessage.DoesNotExist:
                     print('Unable to find matching message id')
                     return HttpResponse(status=403)
 
