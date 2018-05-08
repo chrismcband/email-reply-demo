@@ -63,7 +63,7 @@ class EmailListView(LoginRequiredMixin, ListView):
         return context
 
 
-@csrf_exempt()
+@csrf_exempt
 def parse(self, request):
     data = request.body.decode('utf8')
     print(data)
